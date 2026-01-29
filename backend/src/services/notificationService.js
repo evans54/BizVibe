@@ -2,7 +2,7 @@ const twilio = require('twilio');
 const env = require('../config/env');
 const logger = require('../utils/logger');
 
-const client = env.twilioAccountSid && env.twilioAuthToken
+const client = (env.twilioAccountSid && env.twilioAccountSid.startsWith('AC') && env.twilioAuthToken)
   ? twilio(env.twilioAccountSid, env.twilioAuthToken)
   : null;
 
