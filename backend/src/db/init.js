@@ -6,10 +6,16 @@ const logger = require('../utils/logger');
 const schemaPath = path.join(__dirname, 'schema.sql');
 
 const init = async () => {
-  const schema = fs.readFileSync(schemaPath, 'utf8');
-  await pool.query(schema);
-  logger.info('Database schema initialized');
-  await pool.end();
+  try {
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    await pool.query(schema);
+    logger.info('Database schema initialized');
+  } catch (error) {
+    logger.error('Failed to init database', error);
+    throw error;
+  } finally {
+    await pool.end();
+  }
 };
 
 init().catch((error) => {
