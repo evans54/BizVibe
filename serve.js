@@ -12,6 +12,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Health check - MUST come before other routes
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', services: { frontend: 'ok', backend: 'ok' } });
+});
+
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -21,11 +26,6 @@ app.use('/api', require('./backend/src/app'));
 // Frontend fallback - serve index.html for all non-API routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', services: { frontend: 'ok', backend: 'ok' } });
 });
 
 const PORT = process.env.PORT || 8080;
