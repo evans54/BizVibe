@@ -1,5 +1,7 @@
-# Root Railway Configuration for Monorepo
+# BizVibe Railway Monorepo Configuration
+# This file defines both backend and frontend services
 
+# Backend Service Configuration
 [[services]]
 name = "backend"
 source = "./backend"
@@ -9,6 +11,7 @@ healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
+# Frontend Service Configuration  
 [[services]]
 name = "frontend"
 source = "./frontend"
@@ -18,10 +21,31 @@ healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
+# Environment Variables
 [variables]
-# Backend variables
+# Backend Configuration
 NODE_ENV = "production"
 PORT = "4000"
 
-# Frontend variables
+# Frontend Configuration - IMPORTANT: Update after backend deployment
 VITE_API_URL = "https://bizvibe-production-fc8d.up.railway.app/api"
+
+# Database (Railway provides these automatically)
+# DATABASE_URL = (set by Railway)
+# REDIS_URL = (set by Railway)
+
+# Security (Generate new ones for production)
+JWT_SECRET = "your-jwt-secret-here"
+JWT_REFRESH_SECRET = "your-jwt-refresh-secret-here" 
+ENCRYPTION_KEY = "your-encryption-key-here"
+
+# Optional APIs
+SERP_API_KEY = ""
+TWILIO_ACCOUNT_SID = ""
+TWILIO_AUTH_TOKEN = ""
+GOOGLE_GBP_API_KEY = ""
+
+# App Configuration
+APP_BASE_URL = "https://bizvibe-production-fc8d.up.railway.app"
+BACKUP_DIRECTORY = "./backups"
+BACKUP_CRON = "0 2 * * *"

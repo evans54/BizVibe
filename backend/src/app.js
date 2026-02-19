@@ -24,7 +24,7 @@ if (env.sentryDsn) {
 app.use(helmet());
 app.use(
   cors({
-    origin: env.appBaseUrl,
+    origin: env.appBaseUrl || true, // Allow all origins in production
     credentials: true
   })
 );
