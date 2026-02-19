@@ -1,34 +1,16 @@
-# BizVibe Railway Monorepo Configuration
-# This file defines both backend and frontend services
-
-# Backend Service Configuration
-[[services]]
-name = "backend"
-source = "./backend"
+[build]
+builder = "NIXPACKS"
 dockerfilePath = "Dockerfile"
+
+[deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
-# Frontend Service Configuration  
-[[services]]
-name = "frontend"
-source = "./frontend"
-dockerfilePath = "Dockerfile.railway"
-healthcheckPath = "/"
-healthcheckTimeout = 100
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
-
-# Environment Variables
 [variables]
-# Backend Configuration
 NODE_ENV = "production"
-PORT = "4000"
-
-# Frontend Configuration - IMPORTANT: Update after backend deployment
-VITE_API_URL = "https://bizvibe-production-fc8d.up.railway.app/api"
+PORT = "8080"
 
 # Database (Railway provides these automatically)
 # DATABASE_URL = (set by Railway)
