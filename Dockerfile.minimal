@@ -15,7 +15,7 @@ RUN npm install -g vite
 # Build frontend
 RUN cd frontend && vite build
 
-# Production stage - SIMPLE HTTP server
+# Production stage - MINIMAL setup
 FROM node:18-alpine AS runtime
 
 WORKDIR /app
@@ -23,9 +23,12 @@ WORKDIR /app
 # Copy built frontend
 COPY --from=builder /app/frontend/dist ./public
 
-# Copy simple server
-COPY server.js ./
+# Install express
+RUN npm install express
+
+# Copy minimal server
+COPY serve.minimal.js ./
 
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+CMD ["node", "serve.minimal.js"]
