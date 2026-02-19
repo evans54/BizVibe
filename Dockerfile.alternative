@@ -14,8 +14,8 @@ RUN cd frontend && npm ci
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
 
-# Build frontend with proper permissions
-RUN cd frontend && npx vite build
+# Build frontend using npm script
+RUN cd frontend && npm run build
 
 # Production stage
 FROM node:18-alpine AS runtime
@@ -29,9 +29,8 @@ COPY --from=builder /app/backend/node_modules ./backend/node_modules
 # Copy built frontend
 COPY --from=builder /app/frontend/dist ./public
 
-# Create a simple static file server for frontend
-COPY --from=builder /app/frontend/package*.json ./
-RUN npm ci --only=production
+# Install express for serving
+RUN npm install express cors
 
 # Create server that serves frontend and API
 COPY serve.js ./
