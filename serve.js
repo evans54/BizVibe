@@ -4,32 +4,32 @@ const cors = require('cors');
 
 const app = express();
 
+// Health check - FIRST route, instant response
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Middleware
 app.use(cors({
-  origin: true, // Allow all origins
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
 
-// Health check - MUST come before other routes
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', services: { frontend: 'ok', backend: 'ok' } });
-});
-
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simple API routes for testing
+// Simple API routes
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working' });
 });
 
-// Frontend fallback - serve index.html for all non-API routes
+// Frontend fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`BizVibe full-stack server listening on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
