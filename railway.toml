@@ -1,20 +1,27 @@
-[build]
-builder = "NIXPACKS"
-dockerfilePath = "Dockerfile.railway"
+# Root Railway Configuration for Monorepo
 
-[deploy]
-healthcheckPath = "/"
+[[services]]
+name = "backend"
+source = "./backend"
+dockerfilePath = "Dockerfile"
+healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
 [[services]]
 name = "frontend"
-source = "."
+source = "./frontend"
+dockerfilePath = "Dockerfile.railway"
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
 [variables]
+# Backend variables
+NODE_ENV = "production"
+PORT = "4000"
+
+# Frontend variables
 VITE_API_URL = "https://bizvibe-production-fc8d.up.railway.app/api"
