@@ -4,32 +4,42 @@ const cors = require('cors');
 
 const app = express();
 
-// Health check - FIRST route, instant response
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
-
 // Middleware
 app.use(cors({
-  origin: true,
+  origin: true, // Allow all origins
   credentials: true
 }));
 app.use(express.json());
 
+// Health check - MUST come before other routes
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Import and use backend API routes
+let backendApp;
+try {
+  backendApp = require('./backend/src/app');
+  // Mount the backend app on /api
+  app.use('/api', backendApp);
+  console.log('Backend API loaded successfully');
+} catch (error) {
+  console.log('Backend not available:', error.message);
+  // Simple fallback API
+  app.use('/api', (req, res) => {
+    res.status(503).json({ error: 'Backend not available' });
+  });
+}
+
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simple API routes
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working' });
-});
-
-// Frontend fallback
+// Frontend fallback - serve index.html for all non-API routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`BizVibe full-stack server listening on port ${PORT}`);
 });

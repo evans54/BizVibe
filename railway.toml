@@ -11,3 +11,23 @@ restartPolicyMaxRetries = 10
 [variables]
 NODE_ENV = "production"
 PORT = "8080"
+
+# Database (Railway provides these automatically)
+# DATABASE_URL = (provided by Railway)
+# REDIS_URL = (provided by Railway)
+
+# Security (Generate new ones for production)
+JWT_SECRET = "generate-new-jwt-secret-here-32-chars-min"
+JWT_REFRESH_SECRET = "generate-new-jwt-refresh-secret-here-32-chars-min"
+ENCRYPTION_KEY = "generate-new-encryption-key-here-32-chars"
+
+# Optional APIs (leave empty if not using)
+SERP_API_KEY = ""
+TWILIO_ACCOUNT_SID = ""
+TWILIO_AUTH_TOKEN = ""
+GOOGLE_GBP_API_KEY = ""
+
+# App Configuration
+APP_BASE_URL = "https://bizvibe-production-fc8d.up.railway.app"
+BACKUP_DIRECTORY = "./backups"
+BACKUP_CRON = "0 2 * * *"
