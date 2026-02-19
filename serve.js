@@ -11,23 +11,27 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Health check - MUST come before other routes
+// Health check - ALWAYS works, doesn't depend on backend
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
 // Import and use backend API routes
-let backendApp;
+let backendLoaded = false;
 try {
-  backendApp = require('./backend/src/app');
+  const backendApp = require('./backend/src/app');
   // Mount the backend app on /api
   app.use('/api', backendApp);
+  backendLoaded = true;
   console.log('Backend API loaded successfully');
 } catch (error) {
-  console.log('Backend not available:', error.message);
-  // Simple fallback API
+  console.log('Backend loading failed:', error.message);
+  // Fallback API routes for when backend fails
   app.use('/api', (req, res) => {
-    res.status(503).json({ error: 'Backend not available' });
+    res.status(503).json({
+      error: 'Backend service unavailable',
+      message: 'Please try again later'
+    });
   });
 }
 
@@ -41,5 +45,6 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`BizVibe full-stack server listening on port ${PORT}`);
+  console.log(`BizVibe server listening on port ${PORT}`);
+  console.log(`Backend loaded: ${backendLoaded}`);
 });

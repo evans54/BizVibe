@@ -34,7 +34,7 @@ COPY --from=builder /app/frontend/dist ./public
 RUN npm install express cors
 
 # Copy Express server
-COPY serve.js ./
+COPY serve.fallback.js ./serve.js
 
 EXPOSE 8080
 
