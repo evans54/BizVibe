@@ -4,8 +4,9 @@ const cors = require('cors');
 
 const app = express();
 
-// Health check - FIRST route, guaranteed to work
+// Health check - FIRST route, INSTANT response (no processing)
 app.get('/health', (req, res) => {
+  res.set('Cache-Control', 'no-cache');
   res.status(200).send('OK');
 });
 

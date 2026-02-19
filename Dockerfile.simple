@@ -20,21 +20,18 @@ FROM node:18-alpine AS runtime
 
 WORKDIR /app
 
-# Install backend dependencies
+# Copy built frontend
+COPY --from=builder /app/frontend/dist ./public
+
+# Install backend dependencies (for future use)
 COPY backend/package*.json ./backend/
 RUN cd backend && npm ci --only=production
 
 # Copy backend source
 COPY backend/ ./backend/
 
-# Copy built frontend
-COPY --from=builder /app/frontend/dist ./public
-
-# Install express and cors for the server
-RUN npm install express cors
-
-# Copy complete server
-COPY server.complete.js ./serve.js
+# Copy lightning-fast server (no extra dependencies needed)
+COPY server.lightning.js ./serve.js
 
 EXPOSE 8080
 
