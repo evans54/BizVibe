@@ -1,0 +1,34 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Install frontend dependencies only
+COPY frontend/package*.json ./frontend/
+RUN cd frontend && npm ci
+
+# Copy frontend source
+COPY frontend/ ./frontend/
+
+# Install vite globally to avoid permission issues
+RUN npm install -g vite
+
+# Build frontend
+RUN cd frontend && vite build
+
+# Production stage
+FROM node:18-alpine AS runtime
+
+WORKDIR /app
+
+# Copy built frontend
+COPY --from=builder /app/frontend/dist ./public
+
+# Install express and cors
+RUN npm install express cors
+
+# Create simple server
+COPY serve.js ./
+
+EXPOSE 8080
+
+CMD ["node", "serve.js"]
