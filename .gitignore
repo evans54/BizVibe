@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment files and secrets (keep only the .example templates)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build output and runtime data
+dist/
+build/
+backups/
+*.log
+.DS_Store
